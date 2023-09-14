@@ -1,0 +1,63 @@
+---
+title: "DELPHI RESULTS ROUND 1"
+output: html_document
+date: "Last update: `r Sys.Date()`"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(readr)
+library(here)
+library(psych)
+library(english)
+library(stringr)
+library(tableone)
+library(kableExtra)
+library(patchwork)
+library(scales)
+library(ggridges)
+library(plotly)
+library(patchwork)
+library(haven)
+```
+
+## Who participated already?
+
+At the moment we have responses from the following:
+
+```{r data, echo=FALSE, message=FALSE, warning=FALSE}
+# Read in the clean csv file
+raw_data <- read_csv("data/delphi_14092023.csv")
+
+raw_data <- raw_data %>%
+  select_all(tolower) %>%
+  filter(!row_number() %in% c(1:2)) %>%
+  rename_with(~gsub(" ", "_", .x, fixed = TRUE))
+
+raw_data %>%
+  group_by(group) %>%
+  count() %>%
+  kable(col.names = c("Stakeholder group", "N")) %>%
+  kable_styling("hover", full_width = FALSE, latex_options = "HOLD_position")
+```
+
+## Tables with proportions
+
+This is sample code, you can ignore, but if you wish to look at it, I can walk you through
+
+### Section AYA_STRONG_2 (*see the new variable names in Qualtrics, it should make sense*)
+*NB* Missing data will be removed from each individual section
+
+```{r}
+data_aya_strong <- raw_data %>%
+  dplyr::select(group, contains("aya_strong_2")) %>%
+  drop_na()
+
+table1::table1(~ aya_strong_2_1 + aya_strong_2_2 + aya_strong_2_3 + aya_strong_2_4,
+               data = data_aya_strong)
+
+```
+
+
+Let me know if this makes sense.
