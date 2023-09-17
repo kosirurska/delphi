@@ -1,0 +1,274 @@
+---
+title: "DELPHI RESULTS ROUND 1 - CAYAS NET"
+output: html_document
+date: "Last update: `r Sys.Date()`"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(readr)
+library(here)
+library(psych)
+library(english)
+library(stringr)
+library(tableone)
+library(kableExtra)
+library(patchwork)
+library(scales)
+library(ggridges)
+library(plotly)
+library(patchwork)
+library(haven)
+```
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+raw_data <- read_csv("data/delphi_17092023.csv")
+
+raw_data <- raw_data %>%
+  select_all(tolower) %>%
+  filter(!row_number() %in% c(1:2)) %>%
+  rename_with(~gsub(" ", "_", .x, fixed = TRUE))
+```
+
+## Tables with proportions
+
+*NB*: Missing data will be removed from each individual section --> only complete cases are analysed
+
+# EU-CAYAS-NET: AYAs
+
+### Section AYA CAYAS BUILT ENVIRONMENT
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+table_aya_cayas_built <- raw_data %>%
+  dplyr::select(contains("aya_cayas_built")) %>%
+  drop_na()
+
+table1::table1(~ aya_cayas_built_1 + aya_cayas_built_2 + aya_cayas_built_3 + aya_cayas_built_4 +
+                 aya_cayas_built_5 + aya_cayas_built_6 + aya_cayas_built_7 + aya_cayas_built_8 +
+                 aya_cayas_built_9 + aya_cayas_built_10 + aya_cayas_built_11 + aya_cayas_built_12 +
+                 aya_cayas_built_13 + aya_cayas_built_14,
+               data = table_aya_cayas_built)
+```
+
+### Section AYA CAYAS MULTIDISCIPLINARY TEAM
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+table_aya_cayas_multidis <- raw_data %>%
+  dplyr::select(contains("aya_cayas_multidis")) %>%
+  drop_na()
+
+table1::table1(~ aya_cayas_multidis_1 + aya_cayas_multidis_2 + aya_cayas_multidis_3 + aya_cayas_multidis_4 +
+                 aya_cayas_multidis_5 + aya_cayas_multidis_6 + aya_cayas_multidis_7 + aya_cayas_multidis_8 +
+                 aya_cayas_multidis_9,
+               data = table_aya_cayas_multidis)
+```
+
+### Section AYA CAYAS GENETIC COUNSELLING AND CLINICAL RESEARCH
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+table_aya_cayas_genetic <- raw_data %>%
+  dplyr::select(contains("aya_cayas_genetic")) %>%
+  drop_na()
+
+table1::table1(~ aya_cayas_genetic_1 + aya_cayas_genetic_2 + aya_cayas_genetic_3 + aya_cayas_genetic_4 +
+                 aya_cayas_genetic_5,
+               data = table_aya_cayas_genetic)
+```
+
+### Section AYA CAYAS NUTRITION AND EXERCISE
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+table_aya_cayas_nutri <- raw_data %>%
+  dplyr::select(contains("aya_cayas_nutri")) %>%
+  drop_na()
+
+table1::table1(~ aya_cayas_nutri_1 + aya_cayas_nutri_2 + aya_cayas_nutri_3 + aya_cayas_nutri_4 +
+                 aya_cayas_nutri_5,
+               data = table_aya_cayas_nutri)
+```
+
+### Section AYA CAYAS FERTILITY
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+table_aya_cayas_fertility <- raw_data %>%
+  dplyr::select(contains("aya_cayas_fertility")) %>%
+  drop_na()
+
+table1::table1(~ aya_cayas_fertility_1 + aya_cayas_fertility_2 + aya_cayas_fertility_3,
+               data = table_aya_cayas_fertility)
+```
+
+### Section AYA CAYAS MENTAL HEALTH and PSYCHO-SOCIAL SUPPORT
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+table_aya_cayas_psych <- raw_data %>%
+  dplyr::select(contains("aya_cayas_psych")) %>%
+  drop_na()
+
+table1::table1(~ aya_cayas_psych_1 + aya_cayas_psych_2 + aya_cayas_psych_3 + aya_cayas_psych_4 +
+                 aya_cayas_psych_5 + aya_cayas_psych_6 + aya_cayas_psych_7 + aya_cayas_psych_8 +
+                 aya_cayas_psych_9,
+               data = table_aya_cayas_psych)
+```
+
+### Section AYA CAYAS EDUCATION and VOCATIONAL SUPPORT
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+table_aya_cayas_edu <- raw_data %>%
+  dplyr::select(contains("aya_cayas_edu")) %>%
+  drop_na()
+
+table1::table1(~ aya_cayas_edu_1 + aya_cayas_edu_2 + aya_cayas_edu_3,
+               data = table_aya_cayas_edu)
+```
+
+### Section AYA CAYAS INSURANCE, FINANCE, LEGAL SUPPORT
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+table_aya_cayas_insurance <- raw_data %>%
+  dplyr::select(contains("aya_cayas_insurance")) %>%
+  drop_na()
+
+table1::table1(~ aya_cayas_insurance_1 + aya_cayas_insurance_2,
+               data = table_aya_cayas_insurance)
+```
+
+### Section AYA CAYAS HOUSING and TRANSPORT
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+table_aya_cayas_housing <- raw_data %>%
+  dplyr::select(contains("aya_cayas_housing")) %>%
+  drop_na()
+
+table1::table1(~ aya_cayas_housing_1 + aya_cayas_housing_2,
+               data = table_aya_cayas_housing)
+```
+
+### AYA EU-CAYAS: Any additions
+```{r echo=FALSE}
+raw_data %>%
+  dplyr::select(aya_cayas_additions) %>%
+  drop_na() %>%
+  kable(col.names = c("Response")) %>%
+  kable_styling("hover", full_width = FALSE, latex_options = "HOLD_position")
+```
+
+### AYA EU-CAYAS: INTEREST
+```{r echo=FALSE}
+raw_data %>%
+  dplyr::select(email, aya_cayas_interest) %>%
+  drop_na(aya_cayas_interest) %>%
+  kable(col.names = c("contact", "Response")) %>%
+  kable_styling("hover", full_width = FALSE, latex_options = "HOLD_position")
+```
+
+# EU-CAYAS-NET: HCPs
+
+### Section HCP CAYAS BUILT ENVIRONMENT
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+table_hcp_cayas_built <- raw_data %>%
+  dplyr::select(contains("hcp_cayas_built")) %>%
+  drop_na()
+
+table1::table1(~ hcp_cayas_built_1 + hcp_cayas_built_2 + hcp_cayas_built_3 + hcp_cayas_built_4 +
+                 hcp_cayas_built_5 + hcp_cayas_built_6 + hcp_cayas_built_7 + hcp_cayas_built_8 +
+                 hcp_cayas_built_9 + hcp_cayas_built_10 + hcp_cayas_built_11 + hcp_cayas_built_12 +
+                 hcp_cayas_built_13 + hcp_cayas_built_14,
+               data = table_hcp_cayas_built)
+```
+
+### Section AYA CAYAS MULTIDISCIPLINARY TEAM
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+table_hcp_cayas_multidis <- raw_data %>%
+  dplyr::select(contains("hcp_cayas_multidis")) %>%
+  drop_na()
+
+table1::table1(~ hcp_cayas_multidis_1 + hcp_cayas_multidis_2 + hcp_cayas_multidis_3 + hcp_cayas_multidis_4 +
+                 hcp_cayas_multidis_5 + hcp_cayas_multidis_6 + hcp_cayas_multidis_7 + hcp_cayas_multidis_8 +
+                 hcp_cayas_multidis_9,
+               data = table_hcp_cayas_multidis)
+```
+
+### Section AYA CAYAS GENETIC COUNSELLING AND CLINICAL RESEARCH
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+table_hcp_cayas_genetic <- raw_data %>%
+  dplyr::select(contains("hcp_cayas_genetic")) %>%
+  drop_na()
+
+table1::table1(~ hcp_cayas_genetic_1 + hcp_cayas_genetic_2 + hcp_cayas_genetic_3 + hcp_cayas_genetic_4 +
+                 hcp_cayas_genetic_5,
+               data = table_hcp_cayas_genetic)
+```
+
+### Section AYA CAYAS NUTRITION AND EXERCISE
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+table_hcp_cayas_nutri <- raw_data %>%
+  dplyr::select(contains("hcp_cayas_nutri")) %>%
+  drop_na()
+
+table1::table1(~ hcp_cayas_nutri_1 + hcp_cayas_nutri_2 + hcp_cayas_nutri_3 + hcp_cayas_nutri_4 +
+                 hcp_cayas_nutri_5,
+               data = table_hcp_cayas_nutri)
+```
+
+### Section AYA CAYAS FERTILITY
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+table_hcp_cayas_fertility <- raw_data %>%
+  dplyr::select(contains("hcp_cayas_fertility")) %>%
+  drop_na()
+
+table1::table1(~ hcp_cayas_fertility_1 + hcp_cayas_fertility_2 + hcp_cayas_fertility_3,
+               data = table_hcp_cayas_fertility)
+```
+
+### Section AYA CAYAS MENTAL HEALTH and PSYCHO-SOCIAL SUPPORT
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+table_hcp_cayas_psych <- raw_data %>%
+  dplyr::select(contains("hcp_cayas_psych")) %>%
+  drop_na()
+
+table1::table1(~ hcp_cayas_psych_1 + hcp_cayas_psych_2 + hcp_cayas_psych_3 + hcp_cayas_psych_4 +
+                 hcp_cayas_psych_5 + hcp_cayas_psych_6 + hcp_cayas_psych_7 + hcp_cayas_psych_8 +
+                 hcp_cayas_psych_9,
+               data = table_hcp_cayas_psych)
+```
+
+### Section AYA CAYAS EDUCATION and VOCATIONAL SUPPORT
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+table_hcp_cayas_edu <- raw_data %>%
+  dplyr::select(contains("hcp_cayas_edu")) %>%
+  drop_na()
+
+table1::table1(~ hcp_cayas_edu_1 + hcp_cayas_edu_2 + hcp_cayas_edu_3,
+               data = table_hcp_cayas_edu)
+```
+
+### Section AYA CAYAS INSURANCE, FINANCE, LEGAL SUPPORT
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+table_hcp_cayas_insurance <- raw_data %>%
+  dplyr::select(contains("hcp_cayas_insurance")) %>%
+  drop_na()
+
+table1::table1(~ hcp_cayas_insurance_1 + hcp_cayas_insurance_2,
+               data = table_hcp_cayas_insurance)
+```
+
+### Section AYA CAYAS HOUSING and TRANSPORT
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+table_hcp_cayas_housing <- raw_data %>%
+  dplyr::select(contains("hcp_cayas_housing")) %>%
+  drop_na()
+
+table1::table1(~ hcp_cayas_housing_1 + hcp_cayas_housing_2,
+               data = table_hcp_cayas_housing)
+```
+
+### AYA EU-CAYAS: Any additions
+```{r echo=FALSE}
+raw_data %>%
+  dplyr::select(hcp_cayas_additions) %>%
+  drop_na() %>%
+  kable(col.names = c("Response")) %>%
+  kable_styling("hover", full_width = FALSE, latex_options = "HOLD_position")
+```
+
+### AYA EU-CAYAS: INTEREST
+```{r echo=FALSE}
+raw_data %>%
+  dplyr::select(email, hcp_cayas_interest) %>%
+  drop_na(hcp_cayas_interest) %>%
+  kable(col.names = c("contact", "Response")) %>%
+  kable_styling("hover", full_width = FALSE, latex_options = "HOLD_position")
+```

@@ -1,0 +1,383 @@
+---
+title: "DELPHI RESULTS ROUND 1 - STRONG-AYA"
+output: html_document
+date: "Last update: `r Sys.Date()`"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(readr)
+library(here)
+library(psych)
+library(english)
+library(stringr)
+library(tableone)
+library(kableExtra)
+library(patchwork)
+library(scales)
+library(ggridges)
+library(plotly)
+library(patchwork)
+library(haven)
+```
+
+## Who participated already?
+
+At the moment we have responses from the following:
+
+```{r data, echo=FALSE, message=FALSE, warning=FALSE}
+# Read in the clean csv file
+raw_data <- read_csv("data/delphi_17092023.csv")
+
+raw_data <- raw_data %>%
+  select_all(tolower) %>%
+  filter(!row_number() %in% c(1:2)) %>%
+  rename_with(~gsub(" ", "_", .x, fixed = TRUE))
+
+raw_data %>%
+  group_by(group) %>%
+  count() %>%
+  kable(col.names = c("Stakeholder group", "N")) %>%
+  kable_styling("hover", full_width = FALSE, latex_options = "HOLD_position")
+```
+
+## Tables with proportions
+
+*NB*: Missing data will be removed from each individual section --> only complete cases are analysed
+
+
+
+# STRONG-AYA: AYAs
+
+### Section AYA_STRONG_2: Outcomes of disease
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+table_aya_strong_2 <- raw_data %>%
+  dplyr::select(group, contains("aya_strong_2")) %>%
+  drop_na()
+
+table1::table1(~ aya_strong_2_1 + aya_strong_2_2 + aya_strong_2_3 + aya_strong_2_4,
+               data = table_aya_strong_2)
+```
+
+### Section AYA_STRONG_3: Clinical/Physio outcomes
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+table_aya_strong_3 <- raw_data %>%
+  dplyr::select(group, contains("aya_strong_3")) %>%
+  drop_na()
+
+table1::table1(~ aya_strong_3_1 + aya_strong_3_2 + aya_strong_3_3 + aya_strong_3_4 + 
+                 aya_strong_3_5 + aya_strong_3_6 + aya_strong_3_7 + aya_strong_3_8 +
+                 aya_strong_3_9 + aya_strong_3_10 + aya_strong_3_11 + aya_strong_3_12 +
+                 aya_strong_3_13 + aya_strong_3_14 + aya_strong_3_15 + aya_strong_3_16 +
+                 aya_strong_3_17 + aya_strong_3_18 + aya_strong_3_19 + aya_strong_3_20 +
+                 aya_strong_3_21 + aya_strong_3_22 + aya_strong_3_23 + aya_strong_3_24 +
+                 aya_strong_3_25 + aya_strong_3_26 + aya_strong_3_27 + aya_strong_3_28 +
+                 aya_strong_3_29 + aya_strong_3_30 + aya_strong_3_31,
+               data = table_aya_strong_3)
+```
+
+### Section AYA_STRONG_4: Clinical/Physio outcomes cont.
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+table_aya_strong_4 <- raw_data %>%
+  dplyr::select(group, contains("aya_strong_4")) %>%
+  drop_na()
+
+table1::table1(~ aya_strong_4_1 + aya_strong_4_2 + aya_strong_4_3 + aya_strong_4_4 + 
+                 aya_strong_4_5 + aya_strong_4_6 + aya_strong_4_7 + aya_strong_4_8 +
+                 aya_strong_4_9 + aya_strong_4_10 + aya_strong_4_11 + aya_strong_4_12 +
+                 aya_strong_4_13 + aya_strong_4_14 + aya_strong_4_15 + aya_strong_4_16 +
+                 aya_strong_4_17 + aya_strong_4_18 + aya_strong_4_19 + aya_strong_4_20 +
+                 aya_strong_4_21 + aya_strong_4_22 + aya_strong_4_23 + aya_strong_4_24 +
+                 aya_strong_4_25 + aya_strong_4_26 + aya_strong_4_27 + aya_strong_4_28 +
+                 aya_strong_4_29 + aya_strong_4_30 + aya_strong_4_31 + aya_strong_4_32 +
+                 aya_strong_4_33,
+               data = table_aya_strong_4)
+```
+
+### Section AYA_STRONG_5: Functioning outcomes
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+table_aya_strong_5 <- raw_data %>%
+  dplyr::select(group, contains("aya_strong_5")) %>%
+  drop_na()
+
+table1::table1(~ aya_strong_5_1 + aya_strong_5_2 + aya_strong_5_3 + aya_strong_5_4 + 
+                 aya_strong_5_5 + aya_strong_5_6 + aya_strong_5_7 + aya_strong_5_8 +
+                 aya_strong_5_9 + aya_strong_5_10 + aya_strong_5_11 + aya_strong_5_12 +
+                 aya_strong_5_13 + aya_strong_5_14 + aya_strong_5_15 + aya_strong_5_16 +
+                 aya_strong_5_17 + aya_strong_5_18 + aya_strong_5_19 + aya_strong_5_20 +
+                 aya_strong_5_21 + aya_strong_5_22 + aya_strong_5_23 + aya_strong_5_24 +
+                 aya_strong_5_25 + aya_strong_5_26 + aya_strong_5_27 + aya_strong_5_28 +
+                 aya_strong_5_29 + aya_strong_5_30 + aya_strong_5_31 + aya_strong_5_32 +
+                 aya_strong_5_33 + aya_strong_5_34 + aya_strong_5_35 + aya_strong_5_36 +
+                 aya_strong_5_37 + aya_strong_5_38 + aya_strong_5_39 + aya_strong_5_40,
+               data = table_aya_strong_5)
+```
+
+### Section AYA_STRONG_6: Personal Circumstances
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+table_aya_strong_6 <- raw_data %>%
+  dplyr::select(contains("aya_strong_6")) %>%
+  drop_na()
+
+table1::table1(~ aya_strong_6_1 + aya_strong_6_2 + aya_strong_6_3 + aya_strong_6_4 + 
+                 aya_strong_6_5 + aya_strong_6_6 + aya_strong_6_7,
+               data = table_aya_strong_6)
+```
+
+### Section AYA_STRONG_7: Delivery of care outcomes
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+table_aya_strong_7 <- raw_data %>%
+  dplyr::select(contains("aya_strong_7")) %>%
+  drop_na()
+
+table1::table1(~ aya_strong_7_1 + aya_strong_7_2 + aya_strong_7_3 + aya_strong_7_4 + 
+                 aya_strong_7_5 + aya_strong_7_6 + aya_strong_7_7 + aya_strong_7_8 +
+                 aya_strong_7_9 + aya_strong_7_10 + aya_strong_7_11 + aya_strong_7_12,
+               data = table_aya_strong_7)
+```
+
+### Section AYA_STRONG_8: Resource use outcomes
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+table_aya_strong_8 <- raw_data %>%
+  dplyr::select(contains("aya_strong_8")) %>%
+  drop_na()
+
+table1::table1(~ aya_strong_8_1 + aya_strong_8_2 + aya_strong_8_3 + aya_strong_8_4 + 
+                 aya_strong_8_5 + aya_strong_8_6,
+               data = table_aya_strong_8)
+```
+
+### AYA STRONG: Any additions
+```{r echo=FALSE}
+raw_data %>%
+  dplyr::select(aya_strong_additions) %>%
+  drop_na() %>%
+  kable(col.names = c("Response")) %>%
+  kable_styling("hover", full_width = FALSE, latex_options = "HOLD_position")
+```
+
+\newpage
+
+# STRONG-AYA: HCPs
+
+### Section HCP_STRONG_2: Outcomes of disease
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+table_hcp_strong_2 <- raw_data %>%
+  dplyr::select(contains("hcp_strong_2")) %>%
+  drop_na()
+
+table1::table1(~ hcp_strong_2_1 + hcp_strong_2_2 + hcp_strong_2_3 + hcp_strong_2_4,
+               data = table_hcp_strong_2)
+```
+
+### Section HCP_STRONG_3: Clinical/Physio outcomes
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+table_hcp_strong_3 <- raw_data %>%
+  dplyr::select(contains("hcp_strong_3")) %>%
+  drop_na()
+
+table1::table1(~ hcp_strong_3_1 + hcp_strong_3_2 + hcp_strong_3_3 + hcp_strong_3_4 + 
+                 hcp_strong_3_5 + hcp_strong_3_6 + hcp_strong_3_7 + hcp_strong_3_8 +
+                 hcp_strong_3_9 + hcp_strong_3_10 + hcp_strong_3_11 + hcp_strong_3_12 +
+                 hcp_strong_3_13 + hcp_strong_3_14 + hcp_strong_3_15 + hcp_strong_3_16 +
+                 hcp_strong_3_17 + hcp_strong_3_18 + hcp_strong_3_19 + hcp_strong_3_20 +
+                 hcp_strong_3_21 + hcp_strong_3_22 + hcp_strong_3_23 + hcp_strong_3_24 +
+                 hcp_strong_3_25 + hcp_strong_3_26 + hcp_strong_3_27 + hcp_strong_3_28 +
+                 hcp_strong_3_29 + hcp_strong_3_30 + hcp_strong_3_31,
+               data = table_hcp_strong_3)
+```
+
+### Section HCP_STRONG_4: Clinical/Physio outcomes cont.
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+table_hcp_strong_4 <- raw_data %>%
+  dplyr::select(contains("hcp_strong_4")) %>%
+  drop_na()
+
+table1::table1(~ hcp_strong_4_1 + hcp_strong_4_2 + hcp_strong_4_3 + hcp_strong_4_4 + 
+                 hcp_strong_4_5 + hcp_strong_4_6 + hcp_strong_4_7 + hcp_strong_4_8 +
+                 hcp_strong_4_9 + hcp_strong_4_10 + hcp_strong_4_11 + hcp_strong_4_12 +
+                 hcp_strong_4_13 + hcp_strong_4_14 + hcp_strong_4_15 + hcp_strong_4_16 +
+                 hcp_strong_4_17 + hcp_strong_4_18 + hcp_strong_4_19 + hcp_strong_4_20 +
+                 hcp_strong_4_21 + hcp_strong_4_22 + hcp_strong_4_23 + hcp_strong_4_24 +
+                 hcp_strong_4_25 + hcp_strong_4_26 + hcp_strong_4_27 + hcp_strong_4_28 +
+                 hcp_strong_4_29 + hcp_strong_4_30 + hcp_strong_4_31 + hcp_strong_4_32 +
+                 hcp_strong_4_33,
+               data = table_hcp_strong_4)
+```
+
+### Section HCP_STRONG_5: Functioning outcomes
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+table_hcp_strong_5 <- raw_data %>%
+  dplyr::select(group, contains("hcp_strong_5")) %>%
+  drop_na()
+
+table1::table1(~ hcp_strong_5_1 + hcp_strong_5_2 + hcp_strong_5_3 + hcp_strong_5_4 + 
+                 hcp_strong_5_5 + hcp_strong_5_6 + hcp_strong_5_7 + hcp_strong_5_8 +
+                 hcp_strong_5_9 + hcp_strong_5_10 + hcp_strong_5_11 + hcp_strong_5_12 +
+                 hcp_strong_5_13 + hcp_strong_5_14 + hcp_strong_5_15 + hcp_strong_5_16 +
+                 hcp_strong_5_17 + hcp_strong_5_18 + hcp_strong_5_19 + hcp_strong_5_20 +
+                 hcp_strong_5_21 + hcp_strong_5_22 + hcp_strong_5_23 + hcp_strong_5_24 +
+                 hcp_strong_5_25 + hcp_strong_5_26 + hcp_strong_5_27 + hcp_strong_5_28 +
+                 hcp_strong_5_29 + hcp_strong_5_30 + hcp_strong_5_31 + hcp_strong_5_32 +
+                 hcp_strong_5_33 + hcp_strong_5_34 + hcp_strong_5_35 + hcp_strong_5_36 +
+                 hcp_strong_5_37 + hcp_strong_5_38 + hcp_strong_5_39 + hcp_strong_5_40,
+               data = table_hcp_strong_5)
+```
+
+### Section HCP _STRONG_6: Personal Circumstances
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+table_hcp_strong_6 <- raw_data %>%
+  dplyr::select(contains("hcp_strong_6")) %>%
+  drop_na()
+
+table1::table1(~ hcp_strong_6_1 + hcp_strong_6_2 + hcp_strong_6_3 + hcp_strong_6_4 + 
+                 hcp_strong_6_5 + hcp_strong_6_6 + hcp_strong_6_7,
+               data = table_hcp_strong_6)
+```
+
+### Section HCP_STRONG_7: Delivery of care outcomes
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+table_hcp_strong_7 <- raw_data %>%
+  dplyr::select(contains("hcp_strong_7")) %>%
+  drop_na()
+
+table1::table1(~ hcp_strong_7_1 + hcp_strong_7_2 + hcp_strong_7_3 + hcp_strong_7_4 + 
+                 hcp_strong_7_5 + hcp_strong_7_6 + hcp_strong_7_7 + hcp_strong_7_8 +
+                 hcp_strong_7_9 + hcp_strong_7_10 + hcp_strong_7_11 + hcp_strong_7_12,
+               data = table_hcp_strong_7)
+```
+
+### Section HCP_STRONG_8: Resource use outcomes
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+table_hcp_strong_8 <- raw_data %>%
+  dplyr::select(contains("hcp_strong_8")) %>%
+  drop_na()
+
+table1::table1(~ hcp_strong_8_1 + hcp_strong_8_2 + hcp_strong_8_3 + hcp_strong_8_4 + 
+                 hcp_strong_8_5 + hcp_strong_8_6,
+               data = table_hcp_strong_8)
+```
+
+### HCP STRONG: Any additions
+```{r echo=FALSE}
+raw_data %>%
+  dplyr::select(hcp_strong_additions) %>%
+  drop_na() %>%
+  kable(col.names = c("Response")) %>%
+  kable_styling("hover", full_width = FALSE, latex_options = "HOLD_position")
+```
+
+\newpage
+
+# STRONG-AYA: RES
+
+### Section RES_STRONG_2: Outcomes of disease
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+table_res_strong_2 <- raw_data %>%
+  dplyr::select(contains("res_strong_2")) %>%
+  drop_na()
+
+table1::table1(~ res_strong_2_1 + res_strong_2_2 + res_strong_2_3 + res_strong_2_4,
+               data = table_res_strong_2)
+```
+
+### Section RES_STRONG_3: Clinical/Physio outcomes
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+table_res_strong_3 <- raw_data %>%
+  dplyr::select(contains("res_strong_3")) %>%
+  drop_na()
+
+table1::table1(~ res_strong_3_1 + res_strong_3_2 + res_strong_3_3 + res_strong_3_4 + 
+                 res_strong_3_5 + res_strong_3_6 + res_strong_3_7 + res_strong_3_8 +
+                 res_strong_3_9 + res_strong_3_10 + res_strong_3_11 + res_strong_3_12 +
+                 res_strong_3_13 + res_strong_3_14 + res_strong_3_15 + res_strong_3_16 +
+                 res_strong_3_17 + res_strong_3_18 + res_strong_3_19 + res_strong_3_20 +
+                 res_strong_3_21 + res_strong_3_22 + res_strong_3_23 + res_strong_3_24 +
+                 res_strong_3_25 + res_strong_3_26 + res_strong_3_27 + res_strong_3_28 +
+                 res_strong_3_29 + res_strong_3_30 + res_strong_3_31,
+               data = table_res_strong_3)
+```
+
+### Section RES_STRONG_4: Clinical/Physio outcomes cont.
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+table_res_strong_4 <- raw_data %>%
+  dplyr::select(contains("res_strong_4")) %>%
+  drop_na()
+
+table1::table1(~ res_strong_4_1 + res_strong_4_2 + res_strong_4_3 + res_strong_4_4 + 
+                 res_strong_4_5 + res_strong_4_6 + res_strong_4_7 + res_strong_4_8 +
+                 res_strong_4_9 + res_strong_4_10 + res_strong_4_11 + res_strong_4_12 +
+                 res_strong_4_13 + res_strong_4_14 + res_strong_4_15 + res_strong_4_16 +
+                 res_strong_4_17 + res_strong_4_18 + res_strong_4_19 + res_strong_4_20 +
+                 res_strong_4_21 + res_strong_4_22 + res_strong_4_23 + res_strong_4_24 +
+                 res_strong_4_25 + res_strong_4_26 + res_strong_4_27 + res_strong_4_28 +
+                 res_strong_4_29 + res_strong_4_30 + res_strong_4_31 + res_strong_4_32 +
+                 res_strong_4_33,
+               data = table_res_strong_4)
+```
+
+### Section RES_STRONG_5: Functioning outcomes
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+table_res_strong_5 <- raw_data %>%
+  dplyr::select(group, contains("res_strong_5")) %>%
+  drop_na()
+
+table1::table1(~ res_strong_5_1 + res_strong_5_2 + res_strong_5_3 + res_strong_5_4 + 
+                 res_strong_5_5 + res_strong_5_6 + res_strong_5_7 + res_strong_5_8 +
+                 res_strong_5_9 + res_strong_5_10 + res_strong_5_11 + res_strong_5_12 +
+                 res_strong_5_13 + res_strong_5_14 + res_strong_5_15 + res_strong_5_16 +
+                 res_strong_5_17 + res_strong_5_18 + res_strong_5_19 + res_strong_5_20 +
+                 res_strong_5_21 + res_strong_5_22 + res_strong_5_23 + res_strong_5_24 +
+                 res_strong_5_25 + res_strong_5_26 + res_strong_5_27 + res_strong_5_28 +
+                 res_strong_5_29 + res_strong_5_30 + res_strong_5_31 + res_strong_5_32 +
+                 res_strong_5_33 + res_strong_5_34 + res_strong_5_35 + res_strong_5_36 +
+                 res_strong_5_37 + res_strong_5_38 + res_strong_5_39 + res_strong_5_40,
+               data = table_res_strong_5)
+```
+
+### Section RES_STRONG_6: Personal Circumstances
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+table_res_strong_6 <- raw_data %>%
+  dplyr::select(contains("res_strong_6")) %>%
+  drop_na()
+
+table1::table1(~ res_strong_6_1 + res_strong_6_2 + res_strong_6_3 + res_strong_6_4 + 
+                 res_strong_6_5 + res_strong_6_6 + res_strong_6_7,
+               data = table_res_strong_6)
+```
+
+### Section RES_STRONG_7: Delivery of care outcomes
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+table_res_strong_7 <- raw_data %>%
+  dplyr::select(contains("res_strong_7")) %>%
+  drop_na()
+
+table1::table1(~ res_strong_7_1 + res_strong_7_2 + res_strong_7_3 + res_strong_7_4 + 
+                 res_strong_7_5 + res_strong_7_6 + res_strong_7_7 + res_strong_7_8 +
+                 res_strong_7_9 + res_strong_7_10 + res_strong_7_11 + res_strong_7_12,
+               data = table_res_strong_7)
+```
+
+### Section RES_STRONG_8: Resource use outcomes
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+table_res_strong_8 <- raw_data %>%
+  dplyr::select(contains("res_strong_8")) %>%
+  drop_na()
+
+table1::table1(~ res_strong_8_1 + res_strong_8_2 + res_strong_8_3 + res_strong_8_4 + 
+                 res_strong_8_5 + res_strong_8_6,
+               data = table_res_strong_8)
+```
+
+### RES STRONG: Any additions
+```{r echo=FALSE}
+raw_data %>%
+  dplyr::select(res_strong_additions) %>%
+  drop_na() %>%
+  kable(col.names = c("Response")) %>%
+  kable_styling("hover", full_width = FALSE, latex_options = "HOLD_position")
+```
